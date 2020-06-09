@@ -22,3 +22,7 @@ npm install
 # develop
 npm run dev
 ```
+
+项目
+- controller：处理数据信息
+- router：处理路由信息
