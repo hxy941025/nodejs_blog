@@ -1,23 +1,21 @@
-const getList = (author, keyword) => {
-    //先返回假数据（格式正确）
-    return [
-        {
-            id: 1,
-            title: '标题A',
-            content: '内容A',
-            createTime: '2020年6月9日15:17:31',
-            author: 'zhangsan'
-        },
-        {
-            id: 2,
-            title: '标题A',
-            content: '内容A',
-            createTime: '2020年6月9日15:18:05',
-            author: 'lisi'
-        }
+const {exec} = require('../db/mysql')
 
-    ]
+const getList = (author, keyword) => {
+    //由于author和keyword值不确定，增加一个where占位预防报错
+    let sql = `select * from blogs where 1=1 `
+    if (author) {
+        sql += `and author ='${author}' `
+    }
+    if (keyword) {
+        sql += `and title like '%${keyword}%' `
+    }
+
+    sql += `order by createtime desc;`
+    //返回promise对象
+    return exec(sql)
+
 }
+
 
 const getDetails = (id) => {
     //先返回假数据（格式正确）

@@ -1,10 +1,11 @@
 {
-  "name": "online-learning-be",
+  "name": "nodejs_blog",
   "version": "0.0.0",
   "private": true,
   "main": "./bin/www.js",
   "scripts": {
-    "dev": "nodemon ./bin/www"
+    "dev": "NODE_ENV=dev nodemon bin/www.js",
+    "prd": "NODE_ENV=production nodemon bin/www.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

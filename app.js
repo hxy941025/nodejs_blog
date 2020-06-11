@@ -17,7 +17,7 @@ const getPostData = req => {
             postData += chunk.toString()
         })
         req.on('end', () => {
-            if (!postData){
+            if (!postData) {
                 resolve({})
                 return
             }
@@ -49,17 +49,29 @@ const serverHandle = (req, res) => {
         req.body = postData
 
         //处理blog路由
-        const blogData = handleBlogRouter(req, res)
-        if (blogData) {
-            res.end(
-                JSON.stringify(blogData)
-            )
-            return
+        const blogResult = handleBlogRouter(req, res)
+
+        if (blogResult) {
+            blogResult.then(blogData => {
+                res.end(
+                    JSON.stringify(blogData)
+                )
+            })
+            return;
         }
+
+        // const blogData = handleBlogRouter(req, res)
+        // if (blogData) {
+        //     res.end(
+        //         JSON.stringify(blogData)
+        //     )
+        //     return
+        // }
 
         //处理user路由
         const userData = handleUserRouter(req, res)
         if (userData) {
+
             res.end(
                 JSON.stringify(userData)
             )
