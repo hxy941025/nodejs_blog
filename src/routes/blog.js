@@ -17,36 +17,48 @@ const handleBlogRouter = (req, res) => {
     }
 
     if (method === 'GET' && req.path === '/api/blog/details') {
-        const data = getDetails(id)
-        return new SuccessModel(data)
+        const result = getDetails(id)
+        return result.then(data => {
+            return new SuccessModel(data)
+        })
     }
 
     if (method === 'POST' && req.path === '/api/blog/new') {
-        const blogData = req.body
-        const data = newBlog(blogData)
-        return new SuccessModel(data)
+        req.body.author = 'zhangsan' //假数据，等待替换
+        const result = newBlog(req.body)
+        return result.then(data => {
+            return new SuccessModel(data)
+        })
     }
 
 
     if (method === 'POST' && req.path === '/api/blog/update') {
         const result = updateBlog(id, req.body)
-        if (result) {
-            return new SuccessModel()
-        } else {
-            return new ErrorModel('更新博客失败')
-        }
+        return result.then(
+            value => {
+                if (value) {
+                    return new SuccessModel()
+                } else {
+                    return new ErrorModel('更新博客失败')
+                }
+            }
+        )
     }
 
 
     if (method === 'POST' && req.path === '/api/blog/del') {
-        const result = delBlog(id)
-        if (result) {
-            return new SuccessModel()
-        } else {
-            return new ErrorModel('删除博客失败')
-        }
+        const author = 'zhangsan' //假数据，等待替换
+        const result = delBlog(id, author)
+        return result.then(
+            value => {
+                if (value) {
+                    return new SuccessModel()
+                } else {
+                    return new ErrorModel('删除博客失败')
+                }
+            }
+        )
     }
-
 }
 
 module.exports = handleBlogRouter;

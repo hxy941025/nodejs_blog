@@ -1,6 +1,6 @@
 const querystring = require('querystring')
 const handleBlogRouter = require('./src/routes/blog')
-const handleUserRouter = require('./src/routes/users')
+const handleUserRouter = require('./src/routes/user')
 
 const getPostData = req => {
     const promise = new Promise((resolve, reject) => {
@@ -44,13 +44,34 @@ const serverHandle = (req, res) => {
     //解析query
     req.query = querystring.parse(url.split('?')[1])
 
+    //解析cookie
+    req.cookie = {}
+    const cookieStr = req.headers.cookie || ''
+    cookieStr.split(';').forEach(item => {
+        if (!item){
+            return
+        }
+        const arr = item.split('=')
+        const key = arr[0]
+        const val = arr[1]
+        req.cookie[key] = val
+    })
+    console.log('req cookie is', req.cookie)
+
+
     //处理Post data
     getPostData(req).then(postData => {
         req.body = postData
 
         //处理blog路由
+        // const blogData = handleBlogRouter(req, res)
+        // if (blogData) {
+        //     res.end(
+        //         JSON.stringify(blogData)
+        //     )
+        //     return
+        // }
         const blogResult = handleBlogRouter(req, res)
-
         if (blogResult) {
             blogResult.then(blogData => {
                 res.end(
@@ -60,23 +81,27 @@ const serverHandle = (req, res) => {
             return;
         }
 
-        // const blogData = handleBlogRouter(req, res)
-        // if (blogData) {
+
+        //处理user路由
+        // const userData = handleUserRouter(req, res)
+        // if (userData) {
+        //
         //     res.end(
-        //         JSON.stringify(blogData)
+        //         JSON.stringify(userData)
         //     )
         //     return
         // }
 
-        //处理user路由
-        const userData = handleUserRouter(req, res)
-        if (userData) {
-
-            res.end(
-                JSON.stringify(userData)
-            )
-            return
+        const userResult = handleUserRouter(req, res)
+        if (userResult){
+            userResult.then(userData => {
+                res.end(
+                    JSON.stringify(userData)
+                )
+            })
+            return;
         }
+
 
         res.writeHead(404, {"Content-type": "text/plain"})
         res.write("404 Not Found\n")
