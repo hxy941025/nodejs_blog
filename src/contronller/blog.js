@@ -51,7 +51,9 @@ const updateBlog = (id, blogData = {}) => {
 
     const {title, content} = blogData
 
-    const sql = `update blogs set title ='${title}', content = '${content}' where id = ${id};`
+    const sql = `
+        update blogs set title='${title}', content='${content}' where id=${id}
+    `
 
     return exec(sql).then(updateData => {
         if (updateData.affectedRows > 0){

@@ -89,7 +89,7 @@ const serverHandle = (req, res) => {
     let needSetCookie = false
     let userId = req.cookie.userid
     if (!userId) {
-        let needSetCookie = true
+        needSetCookie = true
         userId = `${Date.now()}_${Math.random()}`
         set(userId, {})
     }
@@ -106,7 +106,6 @@ const serverHandle = (req, res) => {
             // 设置session
             req.session = sessionData
         }
-        console.log('req.session ', req.session)
 
         //处理Post data
         return getPostData(req)
@@ -126,7 +125,7 @@ const serverHandle = (req, res) => {
             blogResult.then(blogData => {
                 if (needSetCookie) {
                     // 操作cookie
-                    res.setHeader('Set-Cookie'`userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`)
+                    res.setHeader('Set-Cookie',`userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`)
                 }
 
                 res.end(
