@@ -23,6 +23,7 @@ npm run dev
 ```
 
 项目目录
+```
 └── src
     ├── config
     │   └── db.js
@@ -41,3 +42,4 @@ npm run dev
         ├── copy.sh
         ├── log.js
         └── readline.js
+```
