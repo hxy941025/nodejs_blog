@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建博客</title>
+</head>
+<body>
+<h2>新建博客</h2>
+<hr>
+<input type="text" placeholder="title" id="title">
+<div style="height: 20px"></div>
+<textarea type="text" id="content"></textarea>
+<div style="height: 20px"></div>
+<input type="button" value="提交" onclick="update()" />
+<div id="res">登录信息返回区域</div>
+<script type="text/javascript">
+    let resData = {}
+
+    function update(){
+        //获取输入值
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+
+
+        //创建AJAX对象
+        const xhr=new XMLHttpRequest();
+        //向服务器发送请求，指定请求类型，地址，设置请求头
+        xhr.open("POST","/api/blog/new",true);
+        xhr.setRequestHeader('content-type','application/json' );
+        //响应解析完成，将后端返回数据更新在页面上
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState===4){
+                if(xhr.status===200){
+                    res.innerHTML=xhr.responseText;
+                    resData = JSON.parse(xhr.responseText);
+                    if (resData.errno !== 0){
+                        alert('尚未登录')
+                        return;
+                    }
+                    alert('创建成功')
+                    location.href = './admin'
+                }
+            }
+        }
+        //发送内容
+        const data = JSON.stringify({"title":`${title}`,"content":`${content}`
+        })
+        xhr.send(data);
+    }
+</script>
+</body>
+</html>

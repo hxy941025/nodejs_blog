@@ -1,6 +1,7 @@
 ### 基于nodejs搭建博客系统
-原生nodejs实现，用户登录、验证，新增、查询、编辑博客等功能
-用于nodejs入门
+http-test: 原生js实现登录、博客管理等
+blog: 原生nodejs实现，用户登录、验证，新增、查询、编辑博客等功能
+
 
 #### 完成功能
 - API：处理http接口
@@ -25,6 +26,17 @@ npm run dev
 ```
 
 #### 项目目录
+http-test：
+```
+├── admin.html
+├── detail.html
+├── edit.html
+├── index.html
+├── login.html
+└── new.html
+```
+
+blog:
 ```
 src
 ├── config

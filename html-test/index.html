@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<h2>博客首页</h2>
+
+<ul id="blogList"></ul>
+
+<div id="res">信息返回区域</div>
+
+<script type="text/javascript">
+    //获取blog列表
+    const res = document.getElementById("res")
+    const blogList = document.getElementById('blogList')
+    const para = window.location.search.substring(1) || '';
+    GetList()
+
+    function GetList() {
+
+        //创建AJAX对象
+        const xhr = new XMLHttpRequest();
+        //向服务器发送请求，指定请求类型，地址，设置请求头
+        xhr.open("GET", `/api/blog/list?${para}`, true);
+        xhr.setRequestHeader('content-type', 'application/json');
+        //响应解析完成，将后端返回数据更新在页面上
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    createList(xhr.responseText);
+                }
+            }
+        }
+        xhr.send();
+    }
+
+    // 直接模板字符串拼接生成博客列表
+    function createList(data) {
+        const list = JSON.parse(data).data
+        list.forEach(item => {
+            let str = `
+        <li>
+        <a href="/detail?id=${item.id}">${item.title}</a>,
+        ${item.createtime},
+        <a href="/index?author=${item.author}">${item.author}</a>
+        </li>
+        `
+            blogList.insertAdjacentHTML('beforeEnd', str)
+        })
+    }
+</script>
+</body>
+</html>

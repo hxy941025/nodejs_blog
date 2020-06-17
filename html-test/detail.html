@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>博客详情</title>
+</head>
+<body>
+<div id="blogDetail">
+
+</div>
+
+<div id="res">信息返回区域</div>
+
+<script type="text/javascript">
+    //获取blog列表
+    const res = document.getElementById("res")
+    const blogDetail = document.getElementById("blogDetail")
+    const para = window.location.search.substring(1);
+    GetDetails()
+
+    function GetDetails() {
+
+        //创建AJAX对象
+        const xhr = new XMLHttpRequest();
+        //向服务器发送请求，指定请求类型，地址，设置请求头
+        xhr.open("GET", `/api/blog/details?${para}`, true);
+        xhr.setRequestHeader('content-type', 'application/json');
+        //响应解析完成，将后端返回数据更新在页面上
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    createDetail(xhr.responseText);
+                }
+            }
+        }
+        xhr.send();
+    }
+
+    function createDetail(data) {
+        const detail = JSON.parse(data).data
+        let str = `
+            <h2>${detail.title}</h2>
+            ${detail.author}
+            ${detail.createtime}
+            <hr>
+            ${detail.content}
+            `
+        blogDetail.insertAdjacentHTML('beforeEnd', str)
+    }
+</script>
+</body>
+</html>

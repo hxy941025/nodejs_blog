@@ -1,5 +1,4 @@
 const redis = require('redis')
-
 const {REDIS_CONF} = require('../config/db')
 
 //创建客户端

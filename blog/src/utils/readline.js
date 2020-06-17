@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const readline = require('readline')
+const readline = require('blog/src/utils/readline')
 
 const fileName = path.join(__dirname, '../', '../', 'logs', 'access.log')
 

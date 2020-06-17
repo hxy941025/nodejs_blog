@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理中心</title>
+</head>
+<body>
+
+<h2>管理中心</h2>
+<hr>
+<a href="/new">新增博客</a>
+<hr>
+<input type="text" placeholder="keyword" id="keyword">
+<input type="button" value="搜索" onclick="GetSelect()"/>
+<div id="blogList"></div>
+<div id="res">信息返回区域</div>
+
+<script type="text/javascript">
+    const res = document.getElementById("res")
+    const blogList = document.getElementById('blogList')
+    let resData = {}
+    GetData()
+
+    function GetData() {
+        const keyword = 'keyword=' + document.getElementById('keyword').value;
+        //创建AJAX对象
+        const xhr = new XMLHttpRequest();
+        //向服务器发送请求，指定请求类型，地址，设置请求头
+        xhr.open("GET", `/api/blog/list?isadmin=1`, true);
+        xhr.setRequestHeader('content-type', 'application/json');
+        //响应解析完成，将后端返回数据更新在页面上
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    createList(xhr.responseText);
+                }
+            }
+        }
+        xhr.send();
+    }
+
+    function GetSelect() {
+
+        const keyword = 'keyword=' + document.getElementById('keyword').value;
+        //创建AJAX对象
+        const xhr = new XMLHttpRequest();
+        //向服务器发送请求，指定请求类型，地址，设置请求头
+        xhr.open("GET", `/api/blog/list?${keyword}&isadmin=1`, true);
+        xhr.setRequestHeader('content-type', 'application/json');
+        //响应解析完成，将后端返回数据更新在页面上
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    resData = JSON.parse(xhr.responseText);
+                    if (resData.errno !== 0) {
+                        alert('尚未登录')
+                        return;
+                    }
+                    // res.innerHTML = xhr.responseText
+                    // console.log(res.value)
+                    createList(xhr.responseText);
+                }
+            }
+        }
+        xhr.send();
+    }
+
+
+    //模板字符串拼接生成
+    function createList(data) {
+        blogList.innerHTML = ""
+        const list = JSON.parse(data).data || []
+        list.forEach(item => {
+            let str = `
+        <li>
+            <a href="/detail?id=${item.id}">${item.title}</a>
+            <a href="/edit?id=${item.id}">编辑</a>
+            <a href="" onclick="delData(${item.id})">删除</a>
+        </li>
+        `
+            blogList.insertAdjacentHTML('beforeEnd', str)
+        })
+    }
+
+    //删除博客
+    function delData(id) {
+        if (confirm('确认删除？')){
+            const xhr = new XMLHttpRequest();
+            //向服务器发送请求，指定请求类型，地址，设置请求头
+            xhr.open("POST", `/api/blog/del?id=${id}`, true);
+            xhr.setRequestHeader('content-type', 'application/json');
+            //响应解析完成，将后端返回数据更新在页面上
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        resData = JSON.parse(xhr.responseText);
+                        if (resData.errno !== 0) {
+                            alert('尚未登录')
+                            return;
+                        }
+                        res.innerHTML = xhr.responseText
+                    }
+                }
+            }
+            xhr.send();
+        }else {
+            return;
+        }
+    }
+
+</script>
+</body>
+</html>

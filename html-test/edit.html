@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑博客</title>
+</head>
+<body>
+<h2>编辑博客</h2>
+<hr>
+<input type="text" placeholder="title" id="title">
+<div style="height: 20px"></div>
+<textarea type="text" id="content"></textarea>
+<div style="height: 20px"></div>
+<input type="button" value="提交" onclick="update()" />
+<div id="res">信息返回区域</div>
+<script type="text/javascript">
+    const title = document.getElementById('title')
+    const content = document.getElementById('content')
+    const para = window.location.search.substring(1);
+    let resData = {}
+    GetDetails()
+
+    function GetDetails() {
+
+        //创建AJAX对象
+        const xhr = new XMLHttpRequest();
+        //向服务器发送请求，指定请求类型，地址，设置请求头
+        xhr.open("GET", `/api/blog/details?${para}`, true);
+        xhr.setRequestHeader('content-type', 'application/json');
+        //响应解析完成，将后端返回数据更新在页面上
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    createDetail(xhr.responseText);
+                }
+            }
+        }
+        xhr.send();
+    }
+
+    function createDetail(data) {
+        const detail = JSON.parse(data).data
+        title.value = detail.title
+        content.value = detail.content
+    }
+
+
+    function update(){
+
+        //创建AJAX对象
+        const xhr=new XMLHttpRequest();
+        //向服务器发送请求，指定请求类型，地址，设置请求头
+        xhr.open("POST",`/api/blog/update?${para}`,true);
+        xhr.setRequestHeader('content-type','application/json' );
+        //响应解析完成，将后端返回数据更新在页面上
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState===4){
+                if(xhr.status===200){
+                    res.innerHTML=xhr.responseText;
+                    resData = JSON.parse(xhr.responseText);
+                    if (resData.errno !== 0){
+                        alert('尚未登录')
+                        return;
+                    }
+                    alert('修改成功')
+                    location.href = './admin'
+                }
+            }
+        }
+        //发送内容
+        const data = JSON.stringify({"title":`${title.value}`,"content":`${content.value}`
+        })
+        xhr.send(data);
+    }
+</script>
+</body>
+</html>

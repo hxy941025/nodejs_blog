@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body>
+<input type="text" placeholder="User" id="user">
+<input type="text" placeholder="Password" id="pwd">
+<input type="button" value="登录" onclick="GetData()" />
+<div id="res">登录信息返回区域</div>
+<script type="text/javascript">
+    let resData = {}
+    function GetData(){
+        //获取输入值
+        const User = document.getElementById('user').value;
+        const Pwd = document.getElementById('pwd').value;
+        const res = document.getElementById("res")
+
+        //创建AJAX对象
+        const xhr=new XMLHttpRequest();
+        //向服务器发送请求，指定请求类型，地址，设置请求头
+        xhr.open("POST","/api/user/login",true);
+        xhr.setRequestHeader('content-type','application/json' );
+        //响应解析完成，将后端返回数据更新在页面上
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState===4){
+                if(xhr.status===200){
+                    res.innerHTML=xhr.responseText;
+                    resData = JSON.parse(xhr.responseText);
+                    if (resData.errno === -1){
+                        alert('登录失败')
+                        return
+                    }
+                    location.href = './admin'
+                }
+            }
+        }
+        //发送内容
+        const data = JSON.stringify({"username":`${User}`,"password":`${Pwd}`
+    })
+        xhr.send(data);
+    }
+</script>
+</body>
+</html>
