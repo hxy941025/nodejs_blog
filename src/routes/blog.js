@@ -1,4 +1,4 @@
-const {getList, getDetails, newBlog, updateBlog, delBlog} = require('../contronller/blog')
+const {getList, getDetails, newBlog, updateBlog, delBlog} = require('../controller/blog')
 const {SuccessModel, ErrorModel} = require('../model/resModule')
 
 //统一登录验证函数

@@ -1,4 +1,4 @@
-const {login} = require('../contronller/user')
+const {login} = require('../controller/user')
 const {SuccessModel, ErrorModel} = require('../model/resModule')
 const {set} = require('../db/redis')
 
