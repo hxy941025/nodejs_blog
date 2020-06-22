@@ -17,6 +17,7 @@ router.post('/login', function(req, res, next) {
             res.json(
                 new SuccessModel()
             )
+            return
         }
         res.json(
             new ErrorModel('登录失败')
@@ -24,19 +25,5 @@ router.post('/login', function(req, res, next) {
     })
 });
 
-
-router.get('/login-test', function(req, res, next) {
-    if (req.session.username) {
-        res.json({
-            errno: 0,
-            msg: '已登录'
-        })
-        return
-    }
-    res.json({
-        errno: -1,
-        msg: '未登录'
-    })
-});
 
 module.exports = router;
