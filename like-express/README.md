@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 
 
 #### 手写实现思路
-- 中间件是个类，结尾module.exports为函数new一个实例，类似const app = express()
+- 中间件是个类，结尾module.exports为函数new一个实例，引入方式const app = express()
 - 存在use、get、post等方法，利用一个公用方法来收集各请求方法对应的中间件，存入对应的列表中
 - 存在listen方法，通过http.createServer，调用收集好所有中间件的callback函数，并且监听端口，打印信息等
 - callback中实现最基础的res.json，获取请求的url、method，根据method从中间件列表中获取对应method中间件，根据路由匹配是否触发，将所触发到的中间件函数存入stack
