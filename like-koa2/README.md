@@ -1,4 +1,6 @@
 ## 手写koa2中间件实现
+- like-middleware为教程中实现思路、like-middleware2为仿照express中利用shift+递归实现思路
+
 #### 测试
 ```
 node app.js
