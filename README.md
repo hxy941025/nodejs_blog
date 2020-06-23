@@ -2,6 +2,7 @@
 - http-test: 原生js实现登录、博客管理等
 - blog: 原生nodejs实现，用户登录、验证，新增、查询、编辑博客等功能
 - blog-express: 基于express实现上述功能
+- blog-koa2: 基于koa2实现上述功能
 
 #### 完成功能
 - API：处理http接口
