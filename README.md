@@ -24,6 +24,23 @@ npm install
 # start redis
 redis-server
 
+# start http
+cd html-test
+http-server -p 8001
+
+# nginx.conf 
+注释location \
+增加 
+//代理/到8001端口
+location / {
+proxy_pass http://localhost:8001;
+}
+//代理所以/api/到8000端口
+location /api/ {
+proxy_pass http://localhost:8000;
+proxy_set_header Host $host;
+}
+
 # develop
 npm run dev
 ```
